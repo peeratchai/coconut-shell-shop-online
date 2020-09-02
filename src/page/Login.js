@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
-
+import { useHistory } from "react-router-dom";
 
 
 const useStyles = makeStyles((theme) => ({
@@ -46,10 +46,13 @@ const SignIn = () => {
   const classes = useStyles();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
+  const history = useHistory();
 
   const onSignin = () => {
     if (username.toLowerCase() == "admin" && password.toLowerCase() == "1234") {
       alert("Sign in successful")
+      history.push("/home");
+
     } else {
       alert("Invalid username or password")
     }
@@ -62,6 +65,7 @@ const SignIn = () => {
   const passwordChange = (event) => {
     setPassword(event.target.value)
   }
+
 
   return (
     <Container component="main" maxWidth="xs">

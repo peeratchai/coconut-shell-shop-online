@@ -1,0 +1,22 @@
+.each-slide > div {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-size: cover;
+    height: 350px;
+    width: 30vw;
+    margin: 'auto'
+
+  }
+  
+  .each-slide span {
+    padding: 20px;
+    font-size: 20px;
+    background: #efefef;
+    text-align: center;
+  }
+
+  .slide-container{
+      width: 30vw;
+      margin: auto;
+  }
