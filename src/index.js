@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import SignIn from './page/Login';
 import Home from './page/Home/Home';
+import Products from './page/Products/Products'
 import * as serviceWorker from './serviceWorker';
 import {
   BrowserRouter as Router,
@@ -18,6 +19,9 @@ ReactDOM.render(
       {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
       <Switch>
+        <Route path="/products">
+          <Products />
+        </Route>
         <Route path="/home">
           <Home />
         </Route>
