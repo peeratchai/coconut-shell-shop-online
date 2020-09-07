@@ -3,7 +3,8 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import SignIn from './page/Login';
 import Home from './page/Home/Home';
-import Products from './page/Products/Products'
+import Products from './page/Products/Products';
+import Cart from './page/Cart/Cart';
 import * as serviceWorker from './serviceWorker';
 import {
   BrowserRouter as Router,
@@ -12,24 +13,36 @@ import {
   Link
 } from "react-router-dom";
 
+import { render } from 'react-dom'
+import { Provider } from 'react-redux'
+import { createStore } from 'redux'
+import cart from './redux/reducers/'
+
+
+const store = createStore(cart)
 
 ReactDOM.render(
   <React.StrictMode>
-    <Router>
-      {/* A <Switch> looks through its children <Route>s and
+    <Provider store={store}>
+      <Router>
+        {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
-      <Switch>
-        <Route path="/products">
-          <Products />
-        </Route>
-        <Route path="/home">
-          <Home />
-        </Route>
-        <Route path="/">
-          <SignIn />
-        </Route>
-      </Switch>
-    </Router>
+        <Switch>
+          <Route path="/cart">
+            <Cart />
+          </Route>
+          <Route path="/products">
+            <Products />
+          </Route>
+          <Route path="/home">
+            <Home />
+          </Route>
+          <Route path="/">
+            <SignIn />
+          </Route>
+        </Switch>
+      </Router>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

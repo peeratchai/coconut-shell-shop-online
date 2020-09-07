@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -14,15 +14,15 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
 import 'react-slideshow-image/dist/styles.css';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import { Link } from 'react-router-dom';
-import { Row, Col, Icon } from 'antd';
+import { Row, Col, Icon, Badge } from 'antd';
+import Divider from '@material-ui/core/Divider';
+import './MenuBar.css'
+import { connect } from 'react-redux'
 
-// console.log((window.innerHeight * 5 / 100) * 2)
-console.log((window.innerHeight * 5 / 100) * 2)
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -50,13 +50,16 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
-export default function MenuBar(props) {
+function MenuBar(props) {
     const classes = useStyles();
     const [auth, setAuth] = React.useState(true);
+    const [numOfCart, setNumOfCart] = React.useState(0);
     const [anchorEl, setAnchorEl] = React.useState(null);
     const [state, setState] = React.useState({
         left: false,
+    });
+
+    useEffect(() => {
     });
 
     const open = Boolean(anchorEl);
@@ -90,23 +93,48 @@ export default function MenuBar(props) {
             onClick={toggleDrawer(anchor, false)}
             onKeyDown={toggleDrawer(anchor, false)}
         >
+            <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
+                <div style={{ padding: '10px', backgroundColor: '#3F51B5' }}>
+                    <h1 style={{ color: 'white' }}>
+                        Bakery Home
+                    </h1>
+                </div>
+            </Link>
+            {/* Divider ขีดเส้น */}
+            <Divider />
             <List>
-                <Link to="/products" style={{ color: "black", textDecoration: "none" }}>
-                    <ListItem button key='Product'>
-                        <ListItemIcon><InboxIcon /></ListItemIcon>
-                        <ListItemText primary='Product' />
+                <Link to="/home" style={{ color: "black", textDecoration: "none" }}>
+                    <ListItem button key='Home'>
+                        <ListItemIcon>
+                            <Icon type="home" />
+                        </ListItemIcon>
+                        <ListItemText primary='Home' />
                     </ListItem>
                 </Link>
-                <ListItem button key='Cart'>
-                    <ListItemIcon><InboxIcon /></ListItemIcon>
-                    <ListItemText primary='Cart' />
-                </ListItem>
+                <Link to="/products" style={{ color: "black", textDecoration: "none" }}>
+                    <ListItem button key='Products'>
+                        <ListItemIcon>
+                            <Icon type="shop" />
+                        </ListItemIcon>
+                        <ListItemText primary='Products' />
+                    </ListItem>
+                </Link>
+                <Link to="/cart" style={{ color: "black", textDecoration: "none" }}>
+                    <ListItem button key='Cart'>
+                        <ListItemIcon>
+                            <Icon type="shopping-cart" />
+                        </ListItemIcon>
+                        <Badge id="menubar" count={props.cart.Num_of_Products}>
+                            <ListItemText primary='Cart' style={{ marginRight: '10px' }} />
+                        </Badge>
+                    </ListItem>
+                </Link>
             </List>
-            {/* Divider ขีดเส้น */}
-            {/* <Divider /> */}
+
 
         </div>
     );
+    console.log(props.cart)
     return (
         <div className={classes.root}>
             <AppBar position="static">
@@ -115,7 +143,9 @@ export default function MenuBar(props) {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" className={classes.title}>
-                        Bakery
+                        <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
+                            {props.title}
+                        </Link>
                     </Typography>
                     {auth && (
                         <div>
@@ -126,7 +156,9 @@ export default function MenuBar(props) {
                                 onClick={handleMenu}
                                 color="inherit"
                             >
-                                <Icon type="shopping-cart" />
+                                <Badge count={props.cart.Num_of_Products}>
+                                    <Icon type="shopping-cart" className="head-example" />
+                                </Badge>
                             </IconButton>
                             <IconButton
                                 aria-label="account of current user"
@@ -167,7 +199,7 @@ export default function MenuBar(props) {
                     {props.children}
                 </CardContent>
             </Card>
-            <div class={classes.footer}>
+            <div className={classes.footer}>
                 <Row >
                     <Col span={12}>
                         <div style={{ padding: '25px' }}>
@@ -185,4 +217,11 @@ export default function MenuBar(props) {
             </div>
         </div>
     )
-} 
+}
+
+const mapStateToProps = state => ({
+    cart: state.cart
+})
+
+
+export default connect(mapStateToProps)(MenuBar)

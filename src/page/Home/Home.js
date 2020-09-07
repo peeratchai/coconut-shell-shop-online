@@ -29,7 +29,7 @@ export default function Home() {
         ]
 
     return (
-        <MenuBar>
+        <MenuBar title="Bakery Home">
             <div className="slide-container">
                 <Slide>
                     <div className="each-slide">
