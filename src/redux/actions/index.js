@@ -8,3 +8,7 @@ export const addProductToCart = (Cart) => ({
     Cart: Cart
 })
 
+export const addTotal = (Total) => ({
+    type: 'ADD_TOTAL',
+    Total: Total
+})

@@ -2,7 +2,8 @@ import { products_list } from '../../../contents/Contents'
 
 let initial_state = {
     Num_of_Products: 0,
-    Cart: products_list
+    Cart: products_list,
+    Total: 0,
 }
 
 const cart = (state = initial_state, action) => {
@@ -10,13 +11,19 @@ const cart = (state = initial_state, action) => {
         case 'ADD_PRODUCT':
             return (
                 {
-                    ...initial_state,
+                    ...state,
                     Num_of_Products: action.Num_of_Products,
+                });
+        case 'ADD_TOTAL':
+            return (
+                {
+                    ...state,
+                    Total: action.Total,
                 });
         case 'ADD_PRODUCT_TO_CART':
             return (
                 {
-                    ...initial_state,
+                    ...state,
                     Cart: action.Cart,
                 });
         default:

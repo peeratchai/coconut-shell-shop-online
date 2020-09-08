@@ -2,41 +2,45 @@ import React, { useState, useEffect } from 'react';
 import MenuBar from '../../components/MenuBar/MenuBar'
 import { Row, Col, Card, Avatar, Skeleton, Icon } from 'antd';
 import 'antd/dist/antd.css';
-import { addProduct, addProductToCart } from '../../redux/actions'
+import { addProduct, addProductToCart, addTotal } from '../../redux/actions'
 import { connect } from 'react-redux'
 const { Meta } = Card;
 
 function Products(props) {
 
     const [loading, setLoading] = useState(false)
-    let product = props.cart.Cart;
 
-
+    let [product, setProduct] = useState(props.cart.Cart);
 
     const add_product = (id) => {
-        addproduct_check_numOfCart(id);
-    }
-
-    const addproduct_check_numOfCart = (id) => {
         if (product[id].count == 0) {
             let num = props.cart.Num_of_Products + 1
             console.log('num', num)
-
             props.addProduct(num)
         }
-        product[id].count += 1
+        let temp_product = product
+        temp_product[id].count = temp_product[id].count + 1
+        setProduct({
+            ...product,
+            [id]: temp_product[id]
+        })
+        let total = props.cart.Total + product[id].price
+        props.addTotal(total)
         console.log('product', product)
-        console.log(props.cart)
-        props.addProductToCart(product)
-
     }
 
+
     const delete_product = (id) => {
-
         if (product[id].count > 0) {
-            product[id].count -= 1
+            let temp_product = product
+            temp_product[id].count = temp_product[id].count - 1
+            setProduct({
+                ...product,
+                [id]: temp_product[id]
+            })
             deleteproduct_check_numOfCart(id);
-
+            let total = props.cart.Total - product[id].price
+            props.addTotal(total)
         }
     }
 
@@ -47,7 +51,7 @@ function Products(props) {
         }
     }
 
-    console.log(props.cart.Cart[0].img.toString())
+    console.log(props.cart.Num_of_Products)
 
     //Add images
     const products_images = (img) => {
@@ -92,56 +96,7 @@ function Products(props) {
                         </Col>
                     )
                 })}
-                {/* <Col span={8}>
-                    <Card
-                        cover={
-                            <img
-                                alt="example"
-                                src={require('../../assets/images/bakery2.jpg')}
-                                style={{ height: '150px' }}
 
-                            />
-                        }
-                        style={{ width: 300, margin: 'auto' }}
-                        actions={[
-                            <Icon type="plus" key="edit" onClick={(e) => add_product('type2')} />,
-                            <Icon type="minus" key="ellipsis" onClick={(e) => delete_product('type2')} />,
-                            count.type2,
-                        ]}
-                    >
-                        <Skeleton loading={loading} avatar active>
-                            <Meta
-                                title="Card title"
-                                description="This is the description"
-                            />
-                        </Skeleton>
-                    </Card>
-                </Col>
-                <Col span={8}>
-                    <Card
-                        cover={
-                            <img
-                                alt="example"
-                                src={require('../../assets/images/bakery3.jpg')}
-                                style={{ height: '150px' }}
-
-                            />
-                        }
-                        style={{ width: 300, margin: 'auto' }}
-                        actions={[
-                            <Icon type="plus" key="edit" onClick={(e) => add_product('type3')} />,
-                            <Icon type="minus" key="ellipsis" onClick={(e) => delete_product('type3')} />,
-                            count.type3,
-                        ]}
-                    >
-                        <Skeleton loading={loading} avatar active>
-                            <Meta
-                                title="Card title"
-                                description="This is the description"
-                            />
-                        </Skeleton>
-                    </Card>
-                </Col> */}
             </Row>
         </MenuBar >
     )
@@ -154,7 +109,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     addProduct: Num_of_Products => dispatch(addProduct(Num_of_Products)),
-    addProductToCart: product => dispatch(addProductToCart(product))
+    addProductToCart: product => dispatch(addProductToCart(product)),
+    addTotal: total => dispatch(addTotal(total))
 })
 
 
