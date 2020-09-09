@@ -61,7 +61,7 @@ const InvoiceNo = ({ invoice }) => (
             </View >
         </View>
 
-        <View style={styles.invoiceNoContainer} style={{ marginTop: '10px', fontSize: 10 }}>
+        <View style={styles.invoiceNoContainer} style={{ borderColor: 'black', borderBottomWidth: 1, marginTop: '10px', fontSize: 10 }}>
             <View style={styles.invoiceTitleLeft}>
                 <View>
                     <Text>Customer No : C001</Text>
