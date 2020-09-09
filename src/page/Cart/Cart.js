@@ -22,38 +22,7 @@ function Carts(props) {
         id: "5f586c859f42da3cb8adb6bc",
         invoice_no: "1",
         trans_date: moment().format("DD MMM YYYY").toString(),
-        items: [
-            {
-                "sno": 1,
-                "desc": "labore proident excepteur labore consectetur",
-                "qty": 4,
-                "rate": 855.24
-            },
-            {
-                "sno": 2,
-                "desc": "excepteur reprehenderit aliqua irure dolor",
-                "qty": 4,
-                "rate": 890.17
-            },
-            {
-                "sno": 3,
-                "desc": "cillum culpa non elit eu",
-                "qty": 3,
-                "rate": 200.98
-            },
-            {
-                "sno": 4,
-                "desc": "qui magna exercitation consequat anim",
-                "qty": 3,
-                "rate": 1051.38
-            },
-            {
-                "sno": 5,
-                "desc": "eu dolor culpa ex nisi",
-                "qty": 6,
-                "rate": 846.13
-            }
-        ]
+        items: []
     })
 
     // useEffect(() => {

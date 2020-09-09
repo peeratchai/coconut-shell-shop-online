@@ -149,17 +149,18 @@ function MenuBar(props) {
                     </Typography>
                     {auth && (
                         <div>
-                            <IconButton
-                                aria-label="account of current user"
-                                aria-controls="menu-appbar"
-                                aria-haspopup="true"
-                                onClick={handleMenu}
-                                color="inherit"
-                            >
-                                <Badge count={props.cart.Num_of_Products}>
-                                    <Icon type="shopping-cart" className="head-example" />
-                                </Badge>
-                            </IconButton>
+                            <Link to="/cart" style={{ textDecoration: "none", color: "white" }}>
+                                <IconButton
+                                    aria-label="account of current user"
+                                    aria-controls="menu-appbar"
+                                    aria-haspopup="true"
+                                    color="inherit"
+                                >
+                                    <Badge count={props.cart.Num_of_Products}>
+                                        <Icon type="shopping-cart" className="head-example" />
+                                    </Badge>
+                                </IconButton>
+                            </Link>
                             <IconButton
                                 aria-label="account of current user"
                                 aria-controls="menu-appbar"
@@ -184,8 +185,9 @@ function MenuBar(props) {
                                 open={open}
                                 onClose={handleClose}
                             >
-                                <MenuItem onClick={handleClose}>Profile</MenuItem>
-                                <MenuItem onClick={handleClose}>My account</MenuItem>
+                                <MenuItem onClick={handleClose}>
+                                    <Link to="/" style={{ textDecoration: "none", color: "black" }}>Log out</Link>
+                                </MenuItem>
                             </Menu>
                         </div>
                     )}

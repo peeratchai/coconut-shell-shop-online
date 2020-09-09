@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-const SignIn = () => {
+const Login = () => {
   const classes = useStyles();
   const [username, setUsername] = useState();
   const [password, setPassword] = useState();
@@ -90,10 +90,10 @@ const SignIn = () => {
                 margin="normal"
                 required
                 fullWidth
-                id="email"
-                label="Email Address"
-                name="email"
-                autoComplete="email"
+                id="username"
+                label="Username"
+                name="username"
+                autoComplete="username"
                 autoFocus
                 value={username}
                 onChange={usernameChange}
@@ -131,4 +131,4 @@ const SignIn = () => {
   );
 }
 
-export default SignIn;
+export default Login;

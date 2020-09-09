@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import SignIn from './page/Login';
+import Login from './page/Login';
 import Home from './page/Home/Home';
 import Products from './page/Products/Products';
 import Cart from './page/Cart/Cart';
@@ -38,7 +38,7 @@ ReactDOM.render(
             <Home />
           </Route>
           <Route path="/">
-            <SignIn />
+            <Login />
           </Route>
         </Switch>
       </Router>
