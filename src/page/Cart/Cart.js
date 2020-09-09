@@ -1,9 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Fragment } from 'react';
 import MenuBar from '../../components/MenuBar/MenuBar'
-import { Row, Col, Card, Avatar, Skeleton, List, Icon } from 'antd';
+import { Row, Col, Card, Button, Skeleton, List, Icon, Modal } from 'antd';
 import 'antd/dist/antd.css';
 import { connect } from 'react-redux'
 import { addProduct, addProductToCart, addTotal } from '../../redux/actions'
+import { PDFViewer } from '@react-pdf/renderer'
+import Invoice from '../../components/Invoice/Invoice'
+import invoice2 from '../../contents/Invoice.json'
+import moment from 'moment/moment.js'
 
 const { Meta } = Card;
 
@@ -13,6 +17,44 @@ function Carts(props) {
     let [numOfCart, setNumOfCart] = useState(0);
     let [total, setTotal] = useState(props.cart.Total);
     let [product, setProduct] = useState(props.cart.Cart);
+    let [visible, setVisible] = useState(false);
+    let [invoice, setInvoice] = useState({
+        id: "5f586c859f42da3cb8adb6bc",
+        invoice_no: "1",
+        trans_date: moment().format("DD MMM YYYY").toString(),
+        items: [
+            {
+                "sno": 1,
+                "desc": "labore proident excepteur labore consectetur",
+                "qty": 4,
+                "rate": 855.24
+            },
+            {
+                "sno": 2,
+                "desc": "excepteur reprehenderit aliqua irure dolor",
+                "qty": 4,
+                "rate": 890.17
+            },
+            {
+                "sno": 3,
+                "desc": "cillum culpa non elit eu",
+                "qty": 3,
+                "rate": 200.98
+            },
+            {
+                "sno": 4,
+                "desc": "qui magna exercitation consequat anim",
+                "qty": 3,
+                "rate": 1051.38
+            },
+            {
+                "sno": 5,
+                "desc": "eu dolor culpa ex nisi",
+                "qty": 6,
+                "rate": 846.13
+            }
+        ]
+    })
 
     // useEffect(() => {
 
@@ -24,6 +66,9 @@ function Carts(props) {
     //     }
     //     setTotal(total)
     // })
+
+    console.log(invoice)
+    console.log(invoice2)
 
     const add_product = (id) => {
         if (product[id].count == 0) {
@@ -77,6 +122,39 @@ function Carts(props) {
         return require_path;
     }
 
+    const showModal = () => {
+        setVisible(true)
+
+        let cart = props.cart.Cart
+        let temp_invoice_data = [];
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].count > 0) {
+                temp_invoice_data[i] = {
+                    sno: i + 1,
+                    desc: cart[i].name,
+                    qty: cart[i].count,
+                    rate: cart[i].price
+                }
+            }
+        }
+
+        console.log(temp_invoice_data)
+
+        setInvoice({
+            ...invoice,
+            items: temp_invoice_data
+        })
+    };
+
+    const handleOk = () => {
+        setVisible(false)
+    };
+
+    const handleCancel = () => {
+        setVisible(false)
+    };
+
+
     return (
         <MenuBar title="Cart">
             <List
@@ -85,32 +163,64 @@ function Carts(props) {
                 itemLayout="horizontal"
                 dataSource={props.cart.Cart}
                 renderItem={product => (
-                    <List.Item
-                        actions={[
-                            <Icon type="plus" key="edit" onClick={(e) => add_product(product.id)} />,
-                            <Icon type="minus" key="ellipsis" onClick={(e) => delete_product(product.id)} />
-                        ]}
-                    >
-                        <Skeleton avatar title={false} loading={false} active>
-                            <List.Item.Meta
-                                avatar={
-                                    <img width={100} alt="logo" src={products_images(product.img)} />
-                                }
-                                title={<a href="">{product.name}</a>}
-                                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-                            />
-                            <div>total : {product.count}</div>
-                        </Skeleton>
-                    </List.Item>
+                    product.count > 0 ?
+                        <List.Item
+                            actions={[
+                                <Icon type="plus" key="edit" onClick={(e) => add_product(product.id)} />,
+                                <Icon type="minus" key="ellipsis" onClick={(e) => delete_product(product.id)} />
+                            ]}
+                        >
+                            <Skeleton avatar title={false} loading={false} active>
+                                <List.Item.Meta
+                                    avatar={
+                                        <img width={100} alt="logo" src={products_images(product.img)} />
+                                    }
+                                    title={<a href="">{product.name}</a>}
+                                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                />
+                                <div>total : {product.count}</div>
+                            </Skeleton>
+                        </List.Item>
+                        :
+                        <div>
+
+                        </div>
                 )}
             >
+                {
+                    props.cart.Num_of_Products == 0 &&
+                    <List.Item>
+                        <div style={{ width: '100%', textAlign: 'center' }}>
+                            No record.
+                        </div>
+                    </List.Item>
+                }
                 <List.Item>
                     <Skeleton avatar title={false} loading={false} active>
                         <List.Item.Meta />
-                        <div>total : {props.cart.Total} baht</div>
+                        <div style={{ marginRight: '20px' }}>total : {props.cart.Total} baht</div>
+                        {
+                            props.cart.Num_of_Products > 0 &&
+                            <Button type="primary" onClick={() => showModal()}>
+                                Order
+                            </Button>
+                        }
                     </Skeleton>
                 </List.Item>
             </List>
+            <Modal
+                title="Your Order"
+                visible={visible}
+                onOk={() => handleOk()}
+                onCancel={() => handleCancel()}
+                width={'60vw'}
+            >
+                <Fragment >
+                    <PDFViewer width="100%" height="600" className="app" >
+                        <Invoice invoice={invoice} />
+                    </PDFViewer>
+                </Fragment>
+            </Modal>
         </MenuBar >
     )
 }

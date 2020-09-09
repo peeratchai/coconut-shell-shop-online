@@ -50,7 +50,7 @@ const SignIn = () => {
 
   const onSignin = () => {
     if (username.toLowerCase() == "admin" && password.toLowerCase() == "1234") {
-      alert("Sign in successful")
+      // alert("Sign in successful")
       history.push("/home");
 
     } else {

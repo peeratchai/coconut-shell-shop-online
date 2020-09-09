@@ -1,0 +1,38 @@
+{
+    "id": "5f586c859f42da3cb8adb6bc",
+    "invoice_no": "201907-15",
+    "trans_date": "2019-09-11",
+    "due_date": "2019-10-20",
+    "items": [
+      {
+        "sno": 1,
+        "desc": "labore proident excepteur labore consectetur",
+        "qty": 4,
+        "rate": 855.24
+      },
+      {
+        "sno": 2,
+        "desc": "excepteur reprehenderit aliqua irure dolor",
+        "qty": 4,
+        "rate": 890.17
+      },
+      {
+        "sno": 3,
+        "desc": "cillum culpa non elit eu",
+        "qty": 3,
+        "rate": 200.98
+      },
+      {
+        "sno": 4,
+        "desc": "qui magna exercitation consequat anim",
+        "qty": 3,
+        "rate": 1051.38
+      },
+      {
+        "sno": 5,
+        "desc": "eu dolor culpa ex nisi",
+        "qty": 6,
+        "rate": 846.13
+      }
+    ]
+  }

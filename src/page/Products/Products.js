@@ -88,8 +88,8 @@ function Products(props) {
                             >
                                 <Skeleton loading={loading} avatar active>
                                     <Meta
-                                        title="Card title"
-                                        description="This is the description"
+                                        title={product.name}
+                                        description={product.detail}
                                     />
                                 </Skeleton>
                             </Card>
