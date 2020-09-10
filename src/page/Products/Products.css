@@ -1,3 +1,7 @@
 Col *{
     text-align: center;
 }
+
+input.ant-input-number-input{
+    text-align: center !important;
+}

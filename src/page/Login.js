@@ -72,7 +72,7 @@ const Login = () => {
       <CssBaseline />
       <div className={classes.paper}>
         <Typography component="h1" variant="h3" className={classes.header}>
-          Bakery
+          Coconut Shell
         </Typography>
 
 

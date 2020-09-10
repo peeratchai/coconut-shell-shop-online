@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import MenuBar from '../../components/MenuBar/MenuBar'
-import { Row, Col, Card, Avatar, Skeleton, Icon } from 'antd';
+import { Row, Col, Card, InputNumber, Skeleton, Icon } from 'antd';
 import 'antd/dist/antd.css';
 import { addProduct, addProductToCart, addTotal } from '../../redux/actions'
 import { connect } from 'react-redux'
+import return_image from '../../services/image'
+import './Products.css'
 const { Meta } = Card;
 
 function Products(props) {
@@ -12,10 +14,48 @@ function Products(props) {
 
     let [product, setProduct] = useState(props.cart.Cart);
 
+    const onchange_product_count = (id, value) => {
+        if (value >= 0) {
+            let product_count = value;
+            console.log(value)
+            console.log(product[id].count)
+
+            let sum_price_of_product = 0;
+            let dif_count = 0;
+            if (product_count == 0 && product[id].count > 0) {
+                let num = props.cart.Num_of_Products - 1
+                props.addProduct(num)
+            }
+            if (product_count > 0 && product[id].count == 0) {
+                let num = props.cart.Num_of_Products + 1
+                props.addProduct(num)
+            }
+
+            if (product_count > product[id].count) {
+                dif_count = product_count - product[id].count
+                sum_price_of_product = product[id].price * dif_count
+                let total = props.cart.Total + sum_price_of_product
+                console.log(total)
+                props.addTotal(total)
+            } else {
+                dif_count = product[id].count - product_count
+                sum_price_of_product = product[id].price * dif_count
+                let total = props.cart.Total - sum_price_of_product
+                console.log(total)
+                props.addTotal(total)
+            }
+            let temp_product = product
+            temp_product[id].count = product_count
+            setProduct({
+                ...product,
+                [id]: temp_product[id]
+            })
+        }
+    }
+
     const add_product = (id) => {
         if (product[id].count == 0) {
             let num = props.cart.Num_of_Products + 1
-            console.log('num', num)
             props.addProduct(num)
         }
         let temp_product = product
@@ -26,7 +66,6 @@ function Products(props) {
         })
         let total = props.cart.Total + product[id].price
         props.addTotal(total)
-        console.log('product', product)
     }
 
 
@@ -51,45 +90,34 @@ function Products(props) {
         }
     }
 
-    console.log(props.cart.Num_of_Products)
-
-    //Add images
-    const products_images = (img) => {
-        let require_path;
-        switch (img) {
-            case '../../assets/images/bakery1.jpg': require_path = require('../../assets/images/bakery1.jpg'); break;
-            case '../../assets/images/bakery2.jpg': require_path = require('../../assets/images/bakery2.jpg'); break;
-            case '../../assets/images/bakery3.jpg': require_path = require('../../assets/images/bakery3.jpg'); break;
-            default: break;
-        }
-        return require_path;
-    }
+    // console.log(props.cart.Num_of_Products)
 
     return (
         <MenuBar title="Products" >
             <Row>
                 {props.cart.Cart.map((product) => {
+                    let description = <div>{product.detail}<br />ราคา :{product.price}</div>
                     return (
-                        <Col span={8}>
+                        <Col span={8} style={{ marginBottom: "25px" }}>
                             <Card
                                 cover={
                                     <img
                                         alt="example"
-                                        src={products_images(product.img)}
+                                        src={return_image(product.name)}
                                         style={{ height: '150px' }}
                                     />
                                 }
                                 style={{ width: 300, margin: 'auto' }}
                                 actions={[
-                                    <Icon type="plus" key="edit" onClick={(e) => add_product(product.id)} />,
-                                    <Icon type="minus" key="ellipsis" onClick={(e) => delete_product(product.id)} />,
-                                    product.count,
+                                    <Icon id={product.id_name_eng} type="plus" key="edit" onClick={() => add_product(product.id)} />,
+                                    <Icon type="minus" key="ellipsis" onClick={() => delete_product(product.id)} />,
+                                    <InputNumber value={product.count} min={0} onChange={(value) => onchange_product_count(product.id, value)} />,
                                 ]}
                             >
                                 <Skeleton loading={loading} avatar active>
                                     <Meta
                                         title={product.name}
-                                        description={product.detail}
+                                        description={description}
                                     />
                                 </Skeleton>
                             </Card>

@@ -8,7 +8,7 @@ import { PDFViewer } from '@react-pdf/renderer'
 import Invoice from '../../components/Invoice/Invoice'
 import invoice2 from '../../contents/Invoice.json'
 import moment from 'moment/moment.js'
-
+import return_image from '../../services/image'
 const { Meta } = Card;
 
 function Carts(props) {
@@ -79,17 +79,6 @@ function Carts(props) {
         }
     }
 
-    //Add images
-    const products_images = (img) => {
-        let require_path;
-        switch (img) {
-            case '../../assets/images/bakery1.jpg': require_path = require('../../assets/images/bakery1.jpg'); break;
-            case '../../assets/images/bakery2.jpg': require_path = require('../../assets/images/bakery2.jpg'); break;
-            case '../../assets/images/bakery3.jpg': require_path = require('../../assets/images/bakery3.jpg'); break;
-            default: break;
-        }
-        return require_path;
-    }
 
     const showModal = () => {
         setVisible(true)
@@ -100,7 +89,7 @@ function Carts(props) {
             if (cart[i].count > 0) {
                 temp_invoice_data[i] = {
                     sno: i + 1,
-                    desc: cart[i].name,
+                    desc: cart[i].name_eng,
                     qty: cart[i].count,
                     rate: cart[i].price
                 }
@@ -142,10 +131,10 @@ function Carts(props) {
                             <Skeleton avatar title={false} loading={false} active>
                                 <List.Item.Meta
                                     avatar={
-                                        <img width={100} alt="logo" src={products_images(product.img)} />
+                                        <img width={100} alt="logo" src={return_image(product.name)} />
                                     }
                                     title={<a href="">{product.name}</a>}
-                                    description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                                    description={product.detail}
                                 />
                                 <div>total : {product.count}</div>
                             </Skeleton>

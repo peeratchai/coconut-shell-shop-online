@@ -23,7 +23,6 @@ import Divider from '@material-ui/core/Divider';
 import './MenuBar.css'
 import { connect } from 'react-redux'
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -46,7 +45,6 @@ const useStyles = makeStyles((theme) => ({
         width: '100%',
         backgroundColor: '#3F51B5',
         color: 'white',
-        height: '100px'
     }
 }));
 
@@ -96,7 +94,7 @@ function MenuBar(props) {
             <Link to="/home" style={{ textDecoration: "none", color: "white" }}>
                 <div style={{ padding: '10px', backgroundColor: '#3F51B5' }}>
                     <h1 style={{ color: 'white' }}>
-                        Bakery Home
+                        Coconut Shell
                     </h1>
                 </div>
             </Link>
@@ -203,16 +201,21 @@ function MenuBar(props) {
             </Card>
             <div className={classes.footer}>
                 <Row >
-                    <Col span={12}>
+                    <Col span={8}>
                         <div style={{ padding: '25px' }}>
-                            Address : 1518 Pracharat 1 Road,Wongsawang, Bangsue, Bangkok 10800 Thailand. <br />
-                            Contact Tel : 0-2555-2000.
+                            Address : The Product Development of Coconut Shell Group at Ban Thasap. Muangyala, Yala 95000, Thailand. <br />
+                            Contact Tel : 0828260507.
                         </div>
                     </Col>
-                    <Col span={12}>
+                    <Col span={6}>
                         <div style={{ padding: '25px' }}>
                             Fax: 0-2587-4350.<br />
                             Email : contact@op.kmutnb.ac.th
+                        </div>
+                    </Col>
+                    <Col span={10}>
+                        <div style={{ padding: '2%', textAlign: 'right' }}>
+                            <img src={require('../../assets/images/qr_code.jpg')} width={100} height={90}></img>
                         </div>
                     </Col>
                 </Row>
