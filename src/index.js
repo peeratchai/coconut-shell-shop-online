@@ -18,7 +18,6 @@ import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import cart from './redux/reducers/'
 
-
 const store = createStore(cart)
 
 ReactDOM.render(

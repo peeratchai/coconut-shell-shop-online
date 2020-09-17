@@ -9,7 +9,19 @@ import Invoice from '../../components/Invoice/Invoice'
 import invoice2 from '../../contents/Invoice.json'
 import moment from 'moment/moment.js'
 import return_image from '../../services/image'
+
+
+import { db } from '../../config/config';
 const { Meta } = Card;
+
+
+let addItem = (cart, id) => {
+    db.ref('Orders/' + id).set({
+        cart
+    });
+};
+let count = 0
+
 
 function Carts(props) {
 
@@ -18,6 +30,8 @@ function Carts(props) {
     let [total, setTotal] = useState(props.cart.Total);
     let [product, setProduct] = useState(props.cart.Cart);
     let [visible, setVisible] = useState(false);
+    let [temp_data, setTemp_data] = useState();
+    let [count, setCount] = useState();
     let [invoice, setInvoice] = useState({
         id: "5f586c859f42da3cb8adb6bc",
         invoice_no: "1",
@@ -25,16 +39,13 @@ function Carts(props) {
         items: []
     })
 
-    // useEffect(() => {
-
-    //     let total = 0;
-    //     for (let i = 0; i < props.cart.Cart.length; i++) {
-    //         total += props.cart.Cart[i].price * props.cart.Cart[i].count
-    //         console.log(props.cart.Cart[i].price)
-
-    //     }
-    //     setTotal(total)
-    // })
+    useEffect(() => {
+        let itemsRef = db.ref('/Orders/');
+        itemsRef.on('value', snapshot => {
+            count = snapshot.numChildren()
+            console.log("count is " + count)
+        });
+    }, [])
 
     console.log(invoice)
     console.log(invoice2)
@@ -81,6 +92,7 @@ function Carts(props) {
 
 
     const showModal = () => {
+
         setVisible(true)
 
         let cart = props.cart.Cart
@@ -96,16 +108,25 @@ function Carts(props) {
             }
         }
 
-        console.log(temp_invoice_data)
-
+        let temp_data = {};
+        for (let i = 0; i < cart.length; i++) {
+            if (cart[i].count > 0) {
+                temp_data = { ...temp_data, [cart[i].name_eng]: cart[i].count }
+            }
+        }
+        temp_data = { ...temp_data, total: props.cart.Total }
+        setTemp_data(temp_data)
+        setCount(count)
         setInvoice({
             ...invoice,
-            items: temp_invoice_data
+            items: temp_invoice_data,
+
         })
     };
 
     const handleOk = () => {
         setVisible(false)
+        addItem(temp_data, count)
     };
 
     const handleCancel = () => {
