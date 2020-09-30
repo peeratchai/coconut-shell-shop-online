@@ -127,6 +127,14 @@ function MenuBar(props) {
                         </Badge>
                     </ListItem>
                 </Link>
+                <Link to="/history" style={{ color: "black", textDecoration: "none" }}>
+                    <ListItem button key='History'>
+                        <ListItemIcon>
+                            <Icon type="product" />
+                        </ListItemIcon>
+                        <ListItemText primary='History' style={{ marginRight: '10px' }} />
+                    </ListItem>
+                </Link>
             </List>
 
 

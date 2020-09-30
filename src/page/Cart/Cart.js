@@ -115,6 +115,8 @@ function Carts(props) {
             }
         }
         temp_data = { ...temp_data, total: props.cart.Total }
+        temp_data = { ...temp_data, create_date: moment().format("DD MMM YYYY, h:mm:ss a").toString() }
+        console.log(temp_data)
         setTemp_data(temp_data)
         setCount(count)
         setInvoice({

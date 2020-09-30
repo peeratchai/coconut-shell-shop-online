@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import Login from './page/Login';
 import Home from './page/Home/Home';
+import History from './page/History/History';
 import Products from './page/Products/Products';
 import Cart from './page/Cart/Cart';
 import * as serviceWorker from './serviceWorker';
@@ -17,7 +18,6 @@ import { render } from 'react-dom'
 import { Provider } from 'react-redux'
 import { createStore } from 'redux'
 import cart from './redux/reducers/'
-
 const store = createStore(cart)
 
 ReactDOM.render(
@@ -27,6 +27,9 @@ ReactDOM.render(
         {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
         <Switch>
+          <Route path="/history">
+            <History />
+          </Route>
           <Route path="/cart">
             <Cart />
           </Route>
