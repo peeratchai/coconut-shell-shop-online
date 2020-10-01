@@ -1,30 +1,35 @@
 import React, { useState, useEffect, Fragment } from 'react';
 import { db } from '../../config/config';
 import 'antd/dist/antd.css';
-import { Table } from 'antd';
+import { Table, Spin } from 'antd';
 import MenuBar from '../../components/MenuBar/MenuBar'
 import { connect } from 'react-redux'
+import { Collapse } from 'antd';
 
+const { Panel } = Collapse;
 
 function History(props) {
 
-    const [initLoading, setInitLoading] = useState(false);
+    const [initLoading, setInitLoading] = useState(true);
+    let [data_table_sub1, setData_table_sub1] = useState([]);
     let [numOfCart, setNumOfCart] = useState(0);
 
     useEffect(() => {
         let itemsRef = db.ref('/Orders/');
         itemsRef.on('value', (snapshot) => {
             let data = snapshot.val()
-            console.log("data" + JSON.stringify(data))
+            // console.log("data" + JSON.stringify(data))
 
             let temp_data = [];
             data && data.map((data) => {
-                console.log(data.cart.create_date)
-
+                // console.log(data.cart.create_date)
             })
-
+            let data_table_sub1 = [];
+            let data_table_sub2 = [];
             let date;
+            let datetime = [];
             let date_array = [];
+            let dateTime_array = [];
             temp_data = data.reduce((r, a) => {
                 date = a.cart.create_date.split(",");
                 (r[date[0]] = r[date[0]] || []).push(a.cart)
@@ -36,98 +41,111 @@ function History(props) {
                 return r
             }, []);
 
+            dateTime_array = data.reduce((r, a) => {
+                date = a.cart.create_date.split(",");
+                datetime = a.cart.create_date;
+                (r[date[0]] = r[date[0]] || []).push(datetime)
+                return r
+            }, []);
+
+            console.log('dateTime_array', dateTime_array)
+
             date_array = date_array.filter((val, id, array) => array.indexOf(val) == id);
+            const columns = [
+                { title: "No", dataIndex: "no", key: "no" },
+                { title: "Product Name", dataIndex: "name", key: "name" },
+                { title: "QTY", dataIndex: "qty", key: "qty" },
+            ];
 
-            console.log(temp_data)
-            console.log(date_array)
+            let temp_data_source = [];
+            date_array && date_array.map((date) => {
+                let count_date = 1;
+                data_table_sub2[date] = temp_data[date].map((data) => {
+                    temp_data_source = [];
+                    let count = 1;
+                    Object.keys(data).map((productName) => {
+                        if (productName != 'create_date' && productName != 'total') {
+                            temp_data_source.push({ no: count, name: productName, qty: data[productName] })
+                            count++;
+                        }
+                    })
+                    console.log('temp_data_source->', temp_data_source)
 
+                    return (
+                        <Panel header={count_date + " : " + dateTime_array[date][count_date - 1]} key={count_date++}>
+                            <div style={{ width: '100%', position: 'relative' }}>
+                                <Table
+                                    columns={columns}
+                                    dataSource={temp_data_source}
+                                    pagination={false}
+                                />
+                                <div style={{ padding: '20px', position: 'relative', textAlign: 'right' }}>Total : {data.total} baht</div>
+                            </div>
+                        </Panel>
+                    )
+                })
+            })
+
+            let index = 1;
+            if (date_array) {
+                for (let i = date_array.length - 1; i >= 0; i--) {
+                    data_table_sub1.push(
+                        <Panel header={date_array[i]} key={index++}>
+                            <Collapse>
+                                {data_table_sub2[date_array[i]]}
+                            </Collapse>
+                        </Panel>
+                    )
+                }
+            }
+
+
+
+            setData_table_sub1(data_table_sub1)
+            setInitLoading(false)
         });
     }, [])
 
-
     const columns = [
-        { title: "Name", dataIndex: "name", key: "name" },
-        { title: "Age", dataIndex: "age", key: "age" },
-        { title: "Address", dataIndex: "address", key: "address" },
-        {
-            title: "Action",
-            dataIndex: "",
-            key: "x",
-            render: () => <a>Delete</a>
-        }
+        { title: "No", dataIndex: "no", key: "no" },
+        { title: "Product Name", dataIndex: "name", key: "name" },
+        { title: "QTY", dataIndex: "qty", key: "qty" },
     ];
-
-    const columns2 = [
-        { title: "No", dataIndex: "no", key: "name" },
-        { title: "Product Name", dataIndex: "name", key: "age" },
-        { title: "Qty", dataIndex: "qty", key: "address" },
-        { title: "Price", dataIndex: "price", key: "address" },
-    ];
-
-    const data2 = [
-        {
-            key: 1,
-            no: 1,
-            name: "John Brown",
-            qty: 32,
-            price: 333,
-        },
-        {
-            key: 2,
-            no: 2,
-            name: "John Brown",
-            qty: 44,
-            price: 333,
-        },
-        {
-            key: 3,
-            no: 3,
-            name: "John Brown",
-            qty: 5,
-            price: 333,
-        },
-    ];
-
 
     const data = [
         {
-            key: 1,
+            no: 1,
             name: "John Brown",
-            age: 32,
-            address: "New York No. 1 Lake Park",
-            description: <div><Table
-                columns={columns2}
-                dataSource={data2}
-                pagination={false}
-            /><div style={{ textAlign: 'right', padding: '10px', right: '20px' }}>totle: 5</div></div>
+            qty: 32,
+
         },
         {
-            key: 2,
+            no: 2,
             name: "Jim Green",
-            age: 42,
-            address: "London No. 1 Lake Park",
-            description:
-                "My name is Jim Green, I am 42 years old, living in London No. 1 Lake Park."
+            qty: 42,
         },
         {
-            key: 3,
+            no: 3,
             name: "Joe Black",
-            age: 32,
-            address: "Sidney No. 1 Lake Park",
-            description:
-                "My name is Joe Black, I am 32 years old, living in Sidney No. 1 Lake Park."
+            qty: 32,
         }
     ];
+    function callback(key) {
+        console.log(key);
+    }
 
+    const text = `
+        A dog is a type of domesticated animal.
+        Known for its loyalty and faithfulness,
+        it can be found as a welcome guest in many households across the world.
+      `;
     return (
-        <MenuBar title="Cart">
-            <Table
-                columns={columns}
-                expandedRowRender={(record) => (
-                    <p style={{ margin: 0 }}>{record.description}</p>
-                )}
-                dataSource={data}
-            />,
+        <MenuBar title="History">
+            <Spin tip="Loading..." spinning={initLoading} style={{ marginTop: 60 }}>
+                <Collapse onChange={callback}>
+                    {data_table_sub1}
+                </Collapse>
+            </Spin>
         </MenuBar >
     )
 }
